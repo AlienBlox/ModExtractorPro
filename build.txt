@@ -1,0 +1,3 @@
+displayName = Mod Extractor Pro
+author = alienblox1234
+version = 0.1
