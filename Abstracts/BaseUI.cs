@@ -67,8 +67,12 @@ namespace ModExtractorPro.Abstracts
                 return;
             }
 
+            if (DrawBase)
+            {
+                spriteBatch.Draw(Texture.Value, PosBase, BaseColor);
+            }
+
             SafeDraw(spriteBatch);
-            spriteBatch.Draw(Texture.Value, PosBase, BaseColor);
         }
     }
 }
