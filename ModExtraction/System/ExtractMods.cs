@@ -17,77 +17,82 @@ namespace ModExtractorPro.ModExtraction.System
         /// <param name="mod">The connected mod </param>
         public static void Extract(this Mod mod)
         {
-            if (Directory.Exists(Main.SavePath + $"\\SavedMods\\{mod.Name}"))
+            try
             {
-                return;
-            }
-            else
-            {
-                Directory.CreateDirectory(Main.SavePath + $"\\SavedMods\\{mod.Name}");
-            }
-
-            if (!Directory.Exists(Main.SavePath + "\\SavedMods"))
-            {
-                CreateFolders.MakeFolder(Main.SavePath + "\\SavedMods");
-            }
-
-            CreateFolders.MakeFolder(mod.Name);
-
-            foreach (string FileName in mod.GetFileNames())
-            {
-                try
+                if (Directory.Exists(Main.SavePath + $"\\SavedMods\\{mod.Name}"))
                 {
-                    Stream StreamThing = mod.GetFileStream(FileName);
+                    return;
+                }
+                else
+                {
+                    Directory.CreateDirectory(Main.SavePath + $"\\SavedMods\\{mod.Name}");
+                }
 
-                    string Save = Main.SavePath + $"\\{mod.Name}\\{StreamThing}";
+                if (!Directory.Exists(Main.SavePath + "\\SavedMods"))
+                {
+                    CreateFolders.MakeFolder(Main.SavePath + "\\SavedMods");
+                }
 
-                    if (!Directory.Exists(Save))
+                CreateFolders.MakeFolder(mod.Name);
+
+                foreach (string FileName in mod.GetFileNames())
+                {
+                    try
                     {
                         Stream FS = mod.GetFileStream(FileName);
 
-                        if (!Directory.Exists(Save + FileName.ToFileP()))
+                        string Save = Main.SavePath + $"\\{mod.Name}\\{FS}";
+
+                        if (!Directory.Exists(Save))
                         {
-                            Directory.CreateDirectory(Main.SavePath + FileName.ToFileP());
-                        }
+                            if (!Directory.Exists(Save + FileName.ToFileP()))
+                            {
+                                Directory.CreateDirectory(Main.SavePath + FileName.ToFileP());
+                            }
 
-                        if (FileName.GetExt() == ".rawimg")
-                        {
-                            FileName.GetPositionReverse('.', out int pos);
+                            if (FileName.GetExt() == ".rawimg")
+                            {
+                                FileName.GetPositionReverse('.', out int pos);
 
-                            FileStream Streamer = File.Create(Save + FileName[..pos] + ".png");
+                                FileStream Streamer = File.Create(Save + FileName[..pos] + ".png");
 
-                            FS.Position = 0;
-                            FS.CopyTo(Streamer);
+                                FS.Position = 0;
+                                FS.CopyTo(Streamer);
 
-                            Streamer.Dispose();
-                            FS.Dispose();
-                        }
-                        else
-                        {
-                            FileStream Streamer = File.Create(Save + FileName);
+                                Streamer.Dispose();
+                                FS.Dispose();
+                            }
+                            else
+                            {
+                                FileStream Streamer = File.Create(Save + FileName);
 
-                            FS.Position = 0;
-                            FS.CopyTo(Streamer);
+                                FS.Position = 0;
+                                FS.CopyTo(Streamer);
 
-                            Streamer.Dispose();
-                            FS.Dispose();
+                                Streamer.Dispose();
+                                FS.Dispose();
+                            }
                         }
                     }
-                }
-                catch
-                {
+                    catch
+                    {
 
+                    }
                 }
+
+                File.Create(Main.SavePath + $"\\SavedMods\\{mod.Name}\\BuildInfo.txt").Dispose();
+
+                StreamWriter Writer = new(Main.SavePath + $"\\SavedMods\\{mod.Name}\\BuildInfo.txt", false, Encoding.UTF8);
+
+                Writer.WriteLine("Decompiled mod with AlienBlox's Mod Extractor Pro");
+                Writer.WriteLine("Make sure to support this project by going to https://www.youtube.com/channel/UCpu_V3nxWViuAOHAeGlkyvQ/");
+
+                Writer.Dispose();
             }
-
-            File.Create(Main.SavePath + $"\\SavedMods\\{mod.Name}\\BuildInfo.txt");
-
-            StreamWriter Writer = new(Main.SavePath + $"\\SavedMods\\{mod.Name}\\BuildInfo.txt", false, Encoding.UTF8);
-
-            Writer.WriteLine("Decompiled mod with AlienBlox's Mod Extractor Pro");
-            Writer.WriteLine("Make sure to support this project by going to https://www.youtube.com/channel/UCpu_V3nxWViuAOHAeGlkyvQ/");
-
-            Writer.Dispose();
+            catch
+            {
+                Main.NewText("Can't save mod");
+            }
         }
     }
 }

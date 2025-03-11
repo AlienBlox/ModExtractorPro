@@ -1,1 +1,4 @@
-
+Keybinds: {
+	SwitchMods.DisplayName: Switch Mods
+	SaveMods.DisplayName: Save Mods
+}
