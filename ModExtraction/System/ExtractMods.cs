@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Core;
 
 namespace ModExtractorPro.ModExtraction.System
 {
@@ -17,6 +18,8 @@ namespace ModExtractorPro.ModExtraction.System
         /// <param name="mod">The connected mod </param>
         public static void Extract(this Mod mod)
         {
+            mod.Close();
+
             try
             {
                 if (Directory.Exists(Main.SavePath + $"\\SavedMods\\{mod.Name}"))
@@ -39,7 +42,7 @@ namespace ModExtractorPro.ModExtraction.System
                 {
                     try
                     {
-                        Stream FS = mod.GetFileStream(FileName);
+                        Stream FS = mod.GetFileStream(FileName, true);
 
                         string Save = Main.SavePath + $"\\{mod.Name}\\{FS}";
 
@@ -93,6 +96,8 @@ namespace ModExtractorPro.ModExtraction.System
             {
                 Main.NewText("Can't save mod");
             }
+
+            mod.Load();
         }
     }
 }
