@@ -1,3 +1,8 @@
 displayName = Mod Extractor Pro
 author = alienblox1234
 version = 0.1
+hideCode = false
+includeSource = true;
+hideCode = false;
+hideResources = false
+side = Client
