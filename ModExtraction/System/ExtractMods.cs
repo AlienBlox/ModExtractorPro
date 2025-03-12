@@ -40,46 +40,39 @@ namespace ModExtractorPro.ModExtraction.System
 
                 foreach (string FileName in mod.GetFileNames())
                 {
-                    try
+                    byte[] FS = mod.GetFileBytes(FileName);
+
+                    FileName.GetPositionReverse('\\', out int P);
+
+                    string SaveMain = Main.SavePath + $"\\{mod.Name}";
+
+                    string Save = SaveMain + $"\\{FileName.Replace("/", "\\").Remove(P)}";
+
+                    if (!Directory.Exists(SaveMain))
                     {
-                        byte[] FS = mod.GetFileBytes(FileName);
-
-                        FileName.GetPositionReverse('\\', out int P);
-
-                        string SaveMain = Main.SavePath + $"\\{mod.Name}";
-
-                        string Save = SaveMain + $"\\{FileName.Replace("/", "\\").Remove(P)}";
-
-                        if (!Directory.Exists(SaveMain))
+                        if (!Directory.Exists(Save))
                         {
-                            if (!Directory.Exists(Save))
-                            {
-                                Directory.CreateDirectory(Main.SavePath + FileName.ToFileP());
-                            }
-
-                            if (FileName.GetExt() == ".rawimg")
-                            {
-                                FileName.GetPositionReverse('.', out int pos);
-
-                                FileStream Streamer = File.Create(Save + FileName[..pos] + ".png");
-
-                                Streamer.Write(FS, 0, FS.Length);
-
-                                Streamer.Dispose();
-                            }
-                            else
-                            {
-                                FileStream Streamer = File.Create(Save + FileName);
-
-                                Streamer.Write(FS, 0, FS.Length);
-
-                                Streamer.Dispose();
-                            }
+                            Directory.CreateDirectory(Main.SavePath + FileName.ToFileP());
                         }
-                    }
-                    catch
-                    {
 
+                        if (FileName.GetExt() == ".rawimg")
+                        {
+                            FileName.GetPositionReverse('.', out int pos);
+
+                            FileStream Streamer = File.Create(Save + FileName[..pos] + ".png");
+
+                            Streamer.Write(FS, 0, FS.Length);
+
+                            Streamer.Dispose();
+                        }
+                        else
+                        {
+                            FileStream Streamer = File.Create(Save + FileName);
+
+                            Streamer.Write(FS, 0, FS.Length);
+
+                            Streamer.Dispose();
+                        }
                     }
                 }
 
