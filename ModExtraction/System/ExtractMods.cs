@@ -18,8 +18,6 @@ namespace ModExtractorPro.ModExtraction.System
         /// <param name="mod">The connected mod </param>
         public static void Extract(this Mod mod)
         {
-            mod.Close();
-
             try
             {
                 if (Directory.Exists(Main.SavePath + $"\\SavedMods\\{mod.Name}"))
@@ -42,7 +40,7 @@ namespace ModExtractorPro.ModExtraction.System
                 {
                     try
                     {
-                        Stream FS = mod.GetFileStream(FileName, true);
+                        byte[] FS = mod.GetFileBytes(FileName);
 
                         string Save = Main.SavePath + $"\\{mod.Name}\\{FS}";
 
@@ -59,21 +57,17 @@ namespace ModExtractorPro.ModExtraction.System
 
                                 FileStream Streamer = File.Create(Save + FileName[..pos] + ".png");
 
-                                FS.Position = 0;
-                                FS.CopyTo(Streamer);
+                                Streamer.Write(FS, 0, FS.Length);
 
                                 Streamer.Dispose();
-                                FS.Dispose();
                             }
                             else
                             {
                                 FileStream Streamer = File.Create(Save + FileName);
 
-                                FS.Position = 0;
-                                FS.CopyTo(Streamer);
+                                Streamer.Write(FS, 0, FS.Length);
 
                                 Streamer.Dispose();
-                                FS.Dispose();
                             }
                         }
                     }
@@ -96,8 +90,6 @@ namespace ModExtractorPro.ModExtraction.System
             {
                 Main.NewText("Can't save mod");
             }
-
-            mod.Load();
         }
     }
 }
