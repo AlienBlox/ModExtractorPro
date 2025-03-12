@@ -29,6 +29,8 @@ namespace ModExtractorPro.ModExtraction.System
                     Directory.CreateDirectory(Main.SavePath + $"\\SavedMods\\{mod.Name}");
                 }
 
+                Directory.CreateDirectory(Main.SavePath + $"\\SavedMods\\{mod.Name}");
+
                 if (!Directory.Exists(Main.SavePath + "\\SavedMods"))
                 {
                     CreateFolders.MakeFolder(Main.SavePath + "\\SavedMods");
@@ -42,11 +44,15 @@ namespace ModExtractorPro.ModExtraction.System
                     {
                         byte[] FS = mod.GetFileBytes(FileName);
 
-                        string Save = Main.SavePath + $"\\{mod.Name}\\{FS}";
+                        FileName.GetPositionReverse('\\', out int P);
 
-                        if (!Directory.Exists(Save))
+                        string SaveMain = Main.SavePath + $"\\{mod.Name}";
+
+                        string Save = SaveMain + $"\\{FileName.Replace("/", "\\").Remove(P)}";
+
+                        if (!Directory.Exists(SaveMain))
                         {
-                            if (!Directory.Exists(Save + FileName.Replace("/", "\\").Remove(0)))
+                            if (!Directory.Exists(Save))
                             {
                                 Directory.CreateDirectory(Main.SavePath + FileName.ToFileP());
                             }
