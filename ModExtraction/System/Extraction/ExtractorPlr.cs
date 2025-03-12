@@ -26,7 +26,8 @@ namespace ModExtractorPro.ModExtraction.System.Extraction
 
             if (ExtractorSystem.SaveMods.JustPressed)
             {
-                ModLoader.Mods[1].Extract();//ConnectedMod.Extract();
+                ConnectedMod.ExtractAssets();
+                ConnectedMod.Extract();
             }
         }
     }

@@ -1,9 +1,10 @@
-﻿using ModExtractorPro.ModExtraction.System.Utility;
+﻿using Microsoft.Xna.Framework.Graphics;
+using ModExtractorPro.ModExtraction.System.Utility;
+using ReLogic.Content;
 using System.IO;
 using System.Text;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Core;
 
 namespace ModExtractorPro.ModExtraction.System
 {
@@ -88,6 +89,25 @@ namespace ModExtractorPro.ModExtraction.System
             catch
             {
                 Main.NewText("Can't save mod");
+            }
+        }
+
+        /// <summary>
+        /// Extracts the assets from this mod
+        /// </summary>
+        /// <param name="mod">The mod to extract</param>
+        public static void ExtractAssets(this Mod mod)
+        {
+            for (int i = 0; i < mod.GetFileNames().Count; i++)
+            {
+                if (mod.GetFileNames()[i].GetExt() == ".rawimg")
+                {
+                    mod.GetFileNames()[i].GetPositionReverse('.', out int pos);
+
+                    Asset<Texture2D> Asset = mod.Assets.Request<Texture2D>(mod.GetFileNames()[i].Remove(pos));
+
+                    Asset.SaveAsPng(mod);
+                }
             }
         }
     }
