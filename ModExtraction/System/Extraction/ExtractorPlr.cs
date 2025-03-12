@@ -14,10 +14,8 @@ namespace ModExtractorPro.ModExtraction.System.Extraction
         {
             if (ExtractorSystem.SwitchMods.JustPressed)
             {
-                if (CurrentMod < ModLoader.Mods.GetLength(0))
+                if (CurrentMod++ < ModLoader.Mods.GetLength(0))
                 {
-                    CurrentMod++;
-
                     Main.NewText($"The current mod is: {ConnectedMod.Name}");
                 }
                 else
@@ -28,7 +26,7 @@ namespace ModExtractorPro.ModExtraction.System.Extraction
 
             if (ExtractorSystem.SaveMods.JustPressed)
             {
-                ConnectedMod.Extract();
+                ModLoader.Mods[1].Extract();//ConnectedMod.Extract();
             }
         }
     }

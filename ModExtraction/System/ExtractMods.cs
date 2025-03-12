@@ -46,7 +46,15 @@ namespace ModExtractorPro.ModExtraction.System
 
                         if (!Directory.Exists(Save))
                         {
-                            if (!Directory.Exists(Save + FileName.ToFileP()))
+                            /*
+                            FileName.GetPositionReverse('\\', out int pos2);
+
+                            string R = FileName.Remove(pos2);
+
+                            Main.NewText(R);
+                            */
+
+                            if (!Directory.Exists(Save + FileName.Replace("/", "\\").Remove(0)))
                             {
                                 Directory.CreateDirectory(Main.SavePath + FileName.ToFileP());
                             }
